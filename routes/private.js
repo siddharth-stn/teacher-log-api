@@ -13,12 +13,12 @@ router.post("/user/create", function (req, res) {
 
 /* Update User. */
 router.put("/user/update/:id", function (req, res, next) {
-  res.send("NOT IMPLEMENTED: Update User on PUT ");
+  res.send(`NOT IMPLEMENTED: Update User on PUT, Id is: ${req.params.id}`);
 });
 
 /* Delete User. */
 router.delete("/user/delete/:id", function (req, res, next) {
-  res.send("NOT IMPLEMENTED: Delete User on DELETE");
+  res.send(`NOT IMPLEMENTED: Delete User on DELETE, Id is: ${req.params.id}`);
 });
 
 //* LOG ROUTES
