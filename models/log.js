@@ -9,6 +9,18 @@ const LogSchema = new Schema({
   date: { type: Date, default: Date.now, required: true },
   no_of_periods: { type: Number, required: true },
   data: { type: Object, required: true },
+  isLocked: {
+    type: Boolean,
+    enum: [true, false],
+    default: false,
+    required: true,
+  },
+  isIncomplete: {
+    type: Boolean,
+    enum: [true, false],
+    default: true,
+    required: true,
+  },
 });
 
 LogSchema.virtual("date_formatted").get(function () {
