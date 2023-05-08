@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
+//* USER ROUTES
 /* Show users. */
 router.get("/users/list", function (req, res, next) {
   res.send("NOT IMPLEMENTED: SHOW USERS on GET");
@@ -19,5 +20,7 @@ router.put("/user/update/:id", function (req, res, next) {
 router.delete("/user/delete/:id", function (req, res, next) {
   res.send("NOT IMPLEMENTED: Delete User on DELETE");
 });
+
+//* LOG ROUTES
 
 module.exports = router;
