@@ -31,4 +31,4 @@ if (UserSchema.path("isTeacher").options.type === Boolean) {
   });
 }
 
-module.exports = mongoose.model("Usermodel", UserSchema);
+module.exports = mongoose.model("User", UserSchema);
