@@ -23,4 +23,16 @@ router.delete("/user/delete/:id", function (req, res, next) {
 
 //* LOG ROUTES
 
+/* Show the list of logs for a particular user */
+router.post("/log/list/:user_id", function (req, res) {
+  res.send(
+    `NOT IMPLEMENTED: Show list of logs by date of entry, USER Id is: ${req.params.id}`
+  );
+});
+
+/* Create Log */
+router.post("/log/create/:user_id", function (req, res) {
+  res.send(`NOT IMPLEMENTED: CREATE LOG on POST, USER Id is: ${req.params.id}`);
+});
+
 module.exports = router;
