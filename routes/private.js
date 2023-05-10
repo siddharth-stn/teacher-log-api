@@ -35,4 +35,8 @@ router.post("/log/create/:user_id", function (req, res) {
   res.send(`NOT IMPLEMENTED: CREATE LOG on POST, USER Id is: ${req.params.id}`);
 });
 
+router.delete("log/delete/:log_id", function (req, res) {
+  res.send(`NOT IMPLEMENTED: DELETE LOG, Log Id is: ${req.params.id} `);
+});
+
 module.exports = router;
