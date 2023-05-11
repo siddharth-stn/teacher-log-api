@@ -1,8 +1,10 @@
+require("dotenv").config();
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const PassportJWT = require("passport-jwt");
 const JWTStrategy = PassportJWT.Strategy;
 const ExtractJWT = PassportJWT.ExtractJwt;
+const bcrypt = require("bcryptjs");
 
 /* Set up Passport to use local strategy for checking the user credentials in the database */
 passport.use(
@@ -12,13 +14,13 @@ passport.use(
       passwordField: "password",
     },
     (email, password, done) => {
-      User.findOne({ email }, (err, user) => {
+      User.findOne({ email }, async (err, user) => {
         if (err) {
           return done(err);
         }
         if (!user) {
           return done(null, false, { message: "Wrong email id!" });
-        } else if (user.password != password) {
+        } else if (!(await bcrypt.compare(password, user.password))) {
           return done(null, false, {
             message: "Wrong email and password combination",
           });
@@ -35,7 +37,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "SECRET_KEY",
+      secretOrKey: process.env.SECRET_KEY,
     },
     (jwtPayload, done) => {
       User.findOneById(jwtPayload.id, (err, user) => {
