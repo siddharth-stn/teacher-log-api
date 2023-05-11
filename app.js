@@ -1,3 +1,4 @@
+require("dotenv").config();
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -13,8 +14,8 @@ let publicRouter = require("./routes/public");
 var app = express();
 
 // Set Up mongoose connection
-const db_test_URL =
-  "mongodb+srv://siddharth:hanumanji@express-mongo.dlhwrs5.mongodb.net/teacher-log-api?retryWrites=true&w=majority";
+const db_test_URL = process.env.MONGODB_URL;
+
 const mongoose = require("mongoose");
 (async function main() {
   await mongoose.connect(db_test_URL);

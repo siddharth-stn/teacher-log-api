@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const PassportJWT = require("passport-jwt");
 const JWTStrategy = PassportJWT.Strategy;
-const ExtractJWT = PassportJWT.ExtractJWT;
+const ExtractJWT = PassportJWT.ExtractJwt;
 
 /* Set up Passport to use local strategy for checking the user credentials in the database */
 passport.use(
