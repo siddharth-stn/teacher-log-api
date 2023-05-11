@@ -12,7 +12,13 @@ const UserSchema = new Schema({
     trim: true,
     match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   },
-  password: { type: String, required: true, trim: true },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    match:
+      /^(?=\S{8,15}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+  },
   isTeacher: {
     type: Boolean,
     enum: [true, false],
