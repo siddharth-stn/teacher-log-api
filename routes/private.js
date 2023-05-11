@@ -48,7 +48,7 @@ router.put("/log/update/:log_id", function (req, res) {
   res.send(`NOT IMPLEMENTED: UPDATE LOG, Log Id is: ${req.params.log_id}`);
 });
 
-//* Comment Routes
+//* COMMENT ROUTES
 /* Show all comments for a log */
 router.get("/comment/list/:log_id", function (req, res) {
   res.send(
