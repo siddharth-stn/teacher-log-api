@@ -10,6 +10,7 @@ router.post("/login", function (req, res) {
     "local",
     { session: false },
     (err, user, info) /* this is an iife callback  */ => {
+      console.log(err, user, info);
       if (err || !user) {
         return res.status(400).json({
           message: "Something is not right",

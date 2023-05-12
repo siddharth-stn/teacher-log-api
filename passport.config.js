@@ -5,6 +5,7 @@ const PassportJWT = require("passport-jwt");
 const JWTStrategy = PassportJWT.Strategy;
 const ExtractJWT = PassportJWT.ExtractJwt;
 const bcrypt = require("bcryptjs");
+const User = require("./models/user");
 
 /* Set up Passport to use local strategy for checking the user credentials in the database */
 passport.use(
