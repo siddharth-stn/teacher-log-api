@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -22,6 +23,39 @@ const mongoose = require("mongoose");
 })()
   .then(() => console.log("Connected to Database"))
   .catch((err) => console.log(err));
+
+//** Setup admin user
+const User = require("./models/user");
+const bcrypt = require("bcryptjs");
+
+const startup = async () => {
+  const path = "./.seed/userSeed.json";
+  try {
+    const data = await fs.readFileSync(path, "utf8");
+    const userData = JSON.parse(data);
+    userData.password = await bcrypt.hash(userData.password, 10);
+    const user = await User.create(userData);
+    console.log("admin created in the database");
+    console.log("The user created is: ", user);
+    deleteAdminFolder(path);
+  } catch (error) {
+    console.log("Admin present in database");
+    return;
+  }
+};
+
+const deleteAdminFolder = async (path) => {
+  try {
+    await fs.unlinkSync(path);
+    console.log("file deleted successfully");
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};
+
+startup();
+//** Admin User Setup Complete */
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
