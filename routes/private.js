@@ -1,11 +1,10 @@
 var express = require("express");
 var router = express.Router();
+const userController = require("../controllers/userController");
 
 //* USER ROUTES
 /* Show users. */
-router.get("/users/list", function (req, res) {
-  res.send("NOT IMPLEMENTED: SHOW USERS on GET");
-});
+router.get("/users/list", userController.user_list);
 
 router.post("/user/create", function (req, res) {
   res.send("NOT IMPLEMENTED: Create User on POST ");
