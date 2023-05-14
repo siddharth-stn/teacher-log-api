@@ -42,7 +42,7 @@ passport.use(
     },
     async (jwtPayload, done) => {
       try {
-        let user = await User.findOneById(jwtPayload.id);
+        let user = await User.findById(jwtPayload._id);
         return done(null, user);
       } catch (error) {
         return done(error);
