@@ -1,3 +1,4 @@
+require("dotenv");
 var express = require("express");
 var router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -9,11 +10,11 @@ router.post("/login", function (req, res) {
   passport.authenticate(
     "local",
     { session: false },
-    (err, user, info) /* this is an iife callback  */ => {
-      console.log(err, user, info);
+    (err, user, message) /* this is an iife callback  */ => {
       if (err || !user) {
         return res.status(400).json({
-          message: "Something is not right",
+          err: err,
+          info: message,
           user: user,
         });
       }
@@ -23,8 +24,8 @@ router.post("/login", function (req, res) {
           res.send(err);
         }
         // generate a signed json web token with the contents of user object and return it in the response
-        const token = jwt.sign(user, "SECRET_KEY");
-        return res.json({ user, token });
+        const token = jwt.sign(user.toJSON(), process.env.SECRET_KEY);
+        return res.json({ token });
       });
     }
   )(req, res);

@@ -14,11 +14,9 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    (email, password, done) => {
-      User.findOne({ email }, async (err, user) => {
-        if (err) {
-          return done(err);
-        }
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email });
         if (!user) {
           return done(null, false, { message: "Wrong email id!" });
         } else if (!(await bcrypt.compare(password, user.password))) {
@@ -26,9 +24,11 @@ passport.use(
             message: "Wrong email and password combination",
           });
         } else {
-          return done(null, user, { message: "Logged in Successfuly" });
+          return done(null, user, { message: "Logged in Successfully" });
         }
-      });
+      } catch (error) {
+        return done(error);
+      }
     }
   )
 );
@@ -40,14 +40,13 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.SECRET_KEY,
     },
-    (jwtPayload, done) => {
-      User.findOneById(jwtPayload.id, (err, user) => {
-        if (err) {
-          return done(err);
-        } else {
-          return done(null, user);
-        }
-      });
+    async (jwtPayload, done) => {
+      try {
+        let user = await User.findOneById(jwtPayload.id);
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
     }
   )
 );
