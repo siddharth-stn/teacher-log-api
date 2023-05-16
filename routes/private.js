@@ -6,17 +6,14 @@ const userController = require("../controllers/userController");
 /* Show users. */
 router.get("/users/list", userController.user_list);
 
+/* Create User */
 router.post("/user/create", userController.user_create);
 
 /* Update User. */
 router.put("/user/update/:user_id", userController.user_update);
 
 /* Delete User. */
-router.delete("/user/delete/:user_id", function (req, res) {
-  res.send(
-    `NOT IMPLEMENTED: Delete User on DELETE, Id is: ${req.params.user_id}`
-  );
-});
+router.delete("/user/delete/:user_id", userController.user_delete);
 
 //* LOG ROUTES
 /* Show the list of logs for a particular user */

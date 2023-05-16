@@ -1,13 +1,15 @@
 const User = require("../models/user");
+const Log = require("../models/log");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
+// Show users (only non - admin) list on GET
 exports.user_list = async (req, res, next) => {
   if (req.user.isAdmin === true) {
     try {
       const users = await User.find({ isAdmin: true });
       if (users.length === 0) {
-        res.json("No teacher in the database");
+        res.json("No employee in the database");
       } else {
         users.forEach((element) => {
           element.password = "";
@@ -20,6 +22,7 @@ exports.user_list = async (req, res, next) => {
   }
 };
 
+// Handle User create on POST
 exports.user_create = [
   // Validate and sanitize fields
   body("first_name")
@@ -31,7 +34,7 @@ exports.user_create = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Family name must be specified."),
+    .withMessage("Last name must be specified."),
   body("email")
     .trim()
     .isEmail()
@@ -84,6 +87,7 @@ exports.user_create = [
   },
 ];
 
+// Handle User Update on PUT
 exports.user_update = [
   // Validate and sanitize fields
   body("first_name")
@@ -95,7 +99,7 @@ exports.user_update = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Family name must be specified."),
+    .withMessage("Last name must be specified."),
   body("email")
     .trim()
     .isEmail()
@@ -134,9 +138,37 @@ exports.user_update = [
           password: req.body.password,
           errors: errors.array(),
         });
+        return;
+      } else {
+        // Data from the form is valid. Update the user
+        const theUser = await User.findByIdAndUpdate(
+          req.params.user_id,
+          user,
+          {}
+        );
+        res.json("Employee record Updated successfully");
       }
     } catch (error) {
       return next(error);
     }
   },
 ];
+
+// Handle User delete on DELETE
+exports.user_delete = async (req, res, next) => {
+  // Get the details of the user's logs
+  try {
+    const logs = await Log.find({ user: req.params.user_id });
+    if (logs.length > 0) {
+      // User has logs. Send this info back to the client
+      res.json("Can not delete employee as there are logs in the database.");
+      return;
+    } else {
+      // User has no logs. Delete object and send confirmation
+      await User.findByIdAndRemove(req.params.user_id);
+      res.json("Employee deleted successfully");
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
