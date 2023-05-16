@@ -9,9 +9,7 @@ router.get("/users/list", userController.user_list);
 router.post("/user/create", userController.user_create);
 
 /* Update User. */
-router.put("/user/update/:user_id", function (req, res) {
-  res.send(`NOT IMPLEMENTED: Update User on PUT, Id is: ${req.params.user_id}`);
-});
+router.put("/user/update/:user_id", userController.user_update);
 
 /* Delete User. */
 router.delete("/user/delete/:user_id", function (req, res) {
