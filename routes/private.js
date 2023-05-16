@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const userController = require("../controllers/userController");
+const logController = require("../controllers/logController");
 
 //* USER ROUTES
 /* Show users. */
@@ -17,11 +18,7 @@ router.delete("/user/delete/:user_id", userController.user_delete);
 
 //* LOG ROUTES
 /* Show the list of logs for a particular user */
-router.get("/log/list/:user_id", function (req, res) {
-  res.send(
-    `NOT IMPLEMENTED: Show list of logs by date of entry, USER Id is: ${req.params.user_id}`
-  );
-});
+router.get("/log/list/:user_id", logController.log_list);
 
 /* Create Log */
 router.post("/log/create/:user_id", function (req, res) {

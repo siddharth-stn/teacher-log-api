@@ -12,13 +12,13 @@ const LogSchema = new Schema({
   isLocked: {
     type: Boolean,
     enum: [true, false],
-    default: false,
+    default: true,
     required: true,
   },
   isIncomplete: {
     type: Boolean,
     enum: [true, false],
-    default: true,
+    default: false,
     required: true,
   },
 });
