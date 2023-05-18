@@ -29,7 +29,7 @@ exports.log_list = async (req, res, next) => {
   }
 };
 
-// Create new Log by non - admin employee on POST
+// Handle Log create by non - admin employee on POST
 exports.log_create = [
   // validate and sanitize the data
   body("no_of_periods")
@@ -43,5 +43,29 @@ exports.log_create = [
     .withMessage("Entered data is not an object type"),
   async (req, res, next) => {
     const errors = validationResult(req);
+
+    const log = new Log({
+      user: req.user._id,
+      no_of_periods: req.body.no_of_periods,
+      data: req.body.data,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again.
+      // Send back the json with sanitised values/error messages.
+
+      res.json({
+        no_of_periods: req.body.no_of_periods,
+        data: req.body.data,
+      });
+      return;
+    } else {
+      try {
+        await log.save();
+        res.json("log Created successfully");
+      } catch (error) {
+        return next(error);
+      }
+    }
   },
 ];
