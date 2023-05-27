@@ -37,11 +37,7 @@ router.put("/log/update/:log_id", logController.log_update);
 router.get("/comment/list/:log_id", commentController.comments_list);
 
 /* Create a comment */
-router.post("/comment/create/:log_id", function (req, res) {
-  res.send(
-    `Create a comment for a particular log, log id is: ${req.params.log_id}`
-  );
-});
+router.post("/comment/create/:log_id", commentController.comments_create);
 
 /* Update a comment */
 router.put("/comment/update/:comment_id", function (req, res) {

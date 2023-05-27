@@ -7,7 +7,7 @@ const { body, validationResult } = require("express-validator");
 exports.user_list = async (req, res, next) => {
   if (req.user.isAdmin === true) {
     try {
-      const users = await User.find({ isAdmin: true });
+      const users = await User.find({ isAdmin: false });
       if (users.length === 0) {
         res.json("No employee in the database");
       } else {
@@ -19,6 +19,9 @@ exports.user_list = async (req, res, next) => {
     } catch (error) {
       return next(error);
     }
+  } else {
+    res.json("Unauthorized");
+    return;
   }
 };
 
@@ -83,6 +86,7 @@ exports.user_create = [
       }
     } else {
       res.json("User not authorized to perform this operation");
+      return;
     }
   },
 ];
@@ -114,61 +118,71 @@ exports.user_update = [
 
   // Process request after validation and sanitization
   async (req, res, next) => {
-    const errors = validationResult(req);
+    if (req.user.isAdmin === true) {
+      const errors = validationResult(req);
 
-    // Create user object with escaped/trimmed data and old id
-    try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      // Create user object with escaped/trimmed data and old id
+      try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-      const user = new User({
-        _id: req.params.user_id,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        password: hashedPassword,
-      });
-
-      if (!errors.isEmpty()) {
-        // There are errors send the values back
-        // in json format with the error message.
-        res.json({
+        const user = new User({
+          _id: req.params.user_id,
           first_name: req.body.first_name,
           last_name: req.body.last_name,
           email: req.body.email,
-          password: req.body.password,
-          errors: errors.array(),
+          password: hashedPassword,
         });
-        return;
-      } else {
-        // Data from the form is valid. Update the user
-        const theUser = await User.findByIdAndUpdate(
-          req.params.user_id,
-          user,
-          {}
-        );
-        res.json("Employee record Updated successfully");
+
+        if (!errors.isEmpty()) {
+          // There are errors send the values back
+          // in json format with the error message.
+          res.json({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            password: req.body.password,
+            errors: errors.array(),
+          });
+          return;
+        } else {
+          // Data from the form is valid. Update the user
+          const theUser = await User.findByIdAndUpdate(
+            req.params.user_id,
+            user,
+            {}
+          );
+          res.json("Employee record Updated successfully");
+        }
+      } catch (error) {
+        return next(error);
       }
-    } catch (error) {
-      return next(error);
+    } else {
+      res.json("User not authorized to perform this operation");
+      return;
     }
   },
 ];
 
 // Handle User delete on DELETE
 exports.user_delete = async (req, res, next) => {
-  // Get the details of the user's logs
-  try {
-    const logs = await Log.find({ user: req.params.user_id });
-    if (logs.length > 0) {
-      // User has logs. Send this info back to the client
-      res.json("Can not delete employee as there are logs in the database.");
-      return;
-    } else {
-      // User has no logs. Delete object and send confirmation
-      await User.findByIdAndRemove(req.params.user_id);
-      res.json("Employee deleted successfully");
+  if (req.user.isAdmin === true) {
+    // Get the details of the user's logs
+    try {
+      const logs = await Log.find({ user: req.params.user_id });
+      if (logs.length > 0) {
+        // User has logs. Send this info back to the client
+        res.json("Can not delete employee as there are logs in the database.");
+        return;
+      } else {
+        // User has no logs. Delete object and send confirmation
+        await User.findByIdAndRemove(req.params.user_id);
+        res.json("Employee deleted successfully");
+      }
+    } catch (error) {
+      return next(error);
     }
-  } catch (error) {
-    return next(error);
+  } else {
+    res.json("User not authorized to perform this operation");
+    return;
   }
 };
