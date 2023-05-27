@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const userController = require("../controllers/userController");
 const logController = require("../controllers/logController");
+const commentController = require("../controllers/commentController");
 
 //* USER ROUTES
 /* Show users. */
@@ -33,11 +34,7 @@ router.put("/log/update/:log_id", logController.log_update);
 
 //* COMMENT ROUTES
 /* Show all comments for a log */
-router.get("/comment/list/:log_id", function (req, res) {
-  res.send(
-    `Show all comments for a particular log, log id is: ${req.params.log_id}`
-  );
-});
+router.get("/comment/list/:log_id", commentController.comments_list);
 
 /* Create a comment */
 router.post("/comment/create/:log_id", function (req, res) {

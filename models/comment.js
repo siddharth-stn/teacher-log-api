@@ -29,3 +29,5 @@ if (CommentSchema.path("isBySelf").options.type === Boolean) {
 CommentSchema.virtual("date_formatted").get(function () {
   return DateTime.fromJSDate(this.date).setLocale("fr").toLocateString();
 });
+
+module.exports = mongoose.model("Log", CommentSchema);
