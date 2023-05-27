@@ -21,11 +21,7 @@ router.delete("/user/delete/:user_id", userController.user_delete);
 router.get("/log/list/:user_id", logController.log_list);
 
 /* Create Log */
-router.post("/log/create/:user_id", function (req, res) {
-  res.send(
-    `NOT IMPLEMENTED: CREATE LOG on POST, USER Id is: ${req.params.user_id}`
-  );
-});
+router.post("/log/create/:user_id", logController.log_create);
 
 /* Delete Log */
 router.delete("log/delete/:log_id", function (req, res) {
@@ -33,9 +29,7 @@ router.delete("log/delete/:log_id", function (req, res) {
 });
 
 /* Update Log */
-router.put("/log/update/:log_id", function (req, res) {
-  res.send(`NOT IMPLEMENTED: UPDATE LOG, Log Id is: ${req.params.log_id}`);
-});
+router.put("/log/update/:log_id", logController.log_update);
 
 //* COMMENT ROUTES
 /* Show all comments for a log */
