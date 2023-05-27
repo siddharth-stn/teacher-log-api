@@ -57,6 +57,7 @@ exports.log_create = [
       res.json({
         no_of_periods: req.body.no_of_periods,
         data: req.body.data,
+        errors: errors.array(),
       });
       return;
     } else {
